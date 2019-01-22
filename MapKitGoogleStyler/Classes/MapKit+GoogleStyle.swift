@@ -14,14 +14,14 @@ public enum MapKitGoogleStylerError: Error {
 }
 
 public struct MapKitGoogleStyler {
-    public static func buildOverlay(with jsonArray: [[String: Any]]) -> MKTileOverlay {
+    public static func buildOverlay<T: MKTileOverlay>(with jsonArray: [[String: Any]]) -> T {
         let mapStyle = MapStyle(json: jsonArray)
-        let overlay = MKTileOverlay(urlTemplate: mapStyle.urlString)
+        let overlay = T(urlTemplate: mapStyle.urlString)
         overlay.canReplaceMapContent = true
         return overlay
     }
      
-    public static func buildOverlay(with jsonFileURL: URL) throws -> MKTileOverlay {
+    public static func buildOverlay<T: MKTileOverlay>(with jsonFileURL: URL) throws -> T {
         let data = try Data(contentsOf: jsonFileURL)
         let object = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
         if let array = object as? [[String: Any]] {
